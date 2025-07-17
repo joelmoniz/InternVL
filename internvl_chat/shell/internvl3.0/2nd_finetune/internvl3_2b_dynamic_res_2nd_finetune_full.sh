@@ -1,8 +1,8 @@
 set -x
 
-GPUS=${GPUS:-8}
-BATCH_SIZE=${BATCH_SIZE:-128}
-PER_DEVICE_BATCH_SIZE=${PER_DEVICE_BATCH_SIZE:-4}
+GPUS=${GPUS:-4}
+BATCH_SIZE=${BATCH_SIZE:-64}
+PER_DEVICE_BATCH_SIZE=${PER_DEVICE_BATCH_SIZE:-2}
 GRADIENT_ACC=$((BATCH_SIZE / PER_DEVICE_BATCH_SIZE / GPUS))
 
 
@@ -11,7 +11,7 @@ export MASTER_PORT=34229
 export TF_CPP_MIN_LOG_LEVEL=3
 export LAUNCHER=pytorch
 
-OUTPUT_DIR='work_dirs/internvl_chat_v3/internvl3_2b_dynamic_res_2nd_finetune_full'
+OUTPUT_DIR="${SCRATCH}/internvl_chat_v3/internvl3_2b_dynamic_res_2nd_finetune_full"
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
@@ -33,7 +33,7 @@ torchrun \
   --conv_style "internvl2_5" \
   --use_fast_tokenizer False \
   --output_dir ${OUTPUT_DIR} \
-  --meta_path "./shell/data/internvl_1_2_finetune_custom.json" \
+  --meta_path "./playground/highlighted_images_v2_meta.json" \
  --overwrite_output_dir True \
   --force_image_size 448 \
   --max_dynamic_patch 12 \
@@ -63,6 +63,7 @@ torchrun \
   --group_by_length True \
   --dynamic_image_size True \
   --use_thumbnail True \
+  --use_fast_tokenizer False \
   --ps_version 'v2' \
   --deepspeed "zero_stage1_config.json" \
   --report_to "tensorboard" \
