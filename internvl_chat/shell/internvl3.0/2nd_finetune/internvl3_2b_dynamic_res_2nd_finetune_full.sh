@@ -1,8 +1,8 @@
 set -x
 
 GPUS=${GPUS:-4}
-BATCH_SIZE=${BATCH_SIZE:-64}
-PER_DEVICE_BATCH_SIZE=${PER_DEVICE_BATCH_SIZE:-2}
+BATCH_SIZE=${BATCH_SIZE:-128}
+PER_DEVICE_BATCH_SIZE=${PER_DEVICE_BATCH_SIZE:-4}
 GRADIENT_ACC=$((BATCH_SIZE / PER_DEVICE_BATCH_SIZE / GPUS))
 
 
@@ -31,7 +31,6 @@ torchrun \
   internvl/train/internvl_chat_finetune.py \
   --model_name_or_path "OpenGVLab/InternVL3-2B" \
   --conv_style "internvl2_5" \
-  --use_fast_tokenizer False \
   --output_dir ${OUTPUT_DIR} \
   --meta_path "./playground/highlighted_images_v2_meta.json" \
  --overwrite_output_dir True \
