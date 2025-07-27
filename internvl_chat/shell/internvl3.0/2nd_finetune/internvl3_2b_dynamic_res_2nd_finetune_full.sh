@@ -33,7 +33,7 @@ torchrun \
   --conv_style "internvl2_5" \
   --output_dir ${OUTPUT_DIR} \
   --meta_path "./playground/highlighted_images_v2_meta.json" \
- --overwrite_output_dir True \
+ --overwrite_output_dir False \
   --force_image_size 448 \
   --max_dynamic_patch 12 \
   --down_sample_ratio 0.5 \
@@ -44,7 +44,7 @@ torchrun \
   --vision_select_layer -1 \
   --dataloader_num_workers 4 \
   --bf16 True \
-  --num_train_epochs 1 \
+  --num_train_epochs 4 \
   --per_device_train_batch_size ${PER_DEVICE_BATCH_SIZE} \
   --gradient_accumulation_steps ${GRADIENT_ACC} \
   --evaluation_strategy "no" \
@@ -65,5 +65,5 @@ torchrun \
   --use_fast_tokenizer False \
   --ps_version 'v2' \
   --deepspeed "zero_stage1_config.json" \
-  --report_to "tensorboard" \
+  --report_to "wandb" \
   2>&1 | tee -a "${OUTPUT_DIR}/training_log.txt"
