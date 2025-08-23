@@ -11,7 +11,7 @@ export MASTER_PORT=34229
 export TF_CPP_MIN_LOG_LEVEL=3
 export LAUNCHER=pytorch
 
-OUTPUT_DIR="${SCRATCH}/internvl_chat_v3/internvl3_2b_dynamic_res_2nd_finetune_full"
+OUTPUT_DIR="${SCRATCH}/internvl_chat_v3/internvl3_2b_dynamic_res_2nd_finetune_full2"
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
