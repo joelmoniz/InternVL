@@ -1,6 +1,6 @@
 set -x
 
-GPUS=${GPUS:-8}
+GPUS=${GPUS:-4}
 BATCH_SIZE=${BATCH_SIZE:-128}
 PER_DEVICE_BATCH_SIZE=${PER_DEVICE_BATCH_SIZE:-4}
 GRADIENT_ACC=$((BATCH_SIZE / PER_DEVICE_BATCH_SIZE / GPUS))
@@ -11,7 +11,7 @@ export MASTER_PORT=34229
 export TF_CPP_MIN_LOG_LEVEL=3
 export LAUNCHER=pytorch
 
-OUTPUT_DIR='work_dirs/internvl_chat_v3/internvl3_2b_dynamic_res_2nd_finetune_full'
+OUTPUT_DIR="${SCRATCH}/internvl_chat_v3/internvl3_2b_dynamic_res_2nd_finetune_full2"
 
 if [ ! -d "$OUTPUT_DIR" ]; then
   mkdir -p "$OUTPUT_DIR"
@@ -31,10 +31,9 @@ torchrun \
   internvl/train/internvl_chat_finetune.py \
   --model_name_or_path "OpenGVLab/InternVL3-2B" \
   --conv_style "internvl2_5" \
-  --use_fast_tokenizer False \
   --output_dir ${OUTPUT_DIR} \
-  --meta_path "./shell/data/internvl_1_2_finetune_custom.json" \
- --overwrite_output_dir True \
+  --meta_path "./playground/highlighted_images_v2_meta.json" \
+ --overwrite_output_dir False \
   --force_image_size 448 \
   --max_dynamic_patch 12 \
   --down_sample_ratio 0.5 \
@@ -45,7 +44,7 @@ torchrun \
   --vision_select_layer -1 \
   --dataloader_num_workers 4 \
   --bf16 True \
-  --num_train_epochs 1 \
+  --num_train_epochs 4 \
   --per_device_train_batch_size ${PER_DEVICE_BATCH_SIZE} \
   --gradient_accumulation_steps ${GRADIENT_ACC} \
   --evaluation_strategy "no" \
@@ -63,7 +62,8 @@ torchrun \
   --group_by_length True \
   --dynamic_image_size True \
   --use_thumbnail True \
+  --use_fast_tokenizer False \
   --ps_version 'v2' \
   --deepspeed "zero_stage1_config.json" \
-  --report_to "tensorboard" \
+  --report_to "wandb" \
   2>&1 | tee -a "${OUTPUT_DIR}/training_log.txt"

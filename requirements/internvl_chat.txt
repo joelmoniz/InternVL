@@ -1,7 +1,7 @@
 accelerate<1
 bitsandbytes==0.42.0
 decord
-deepspeed>=0.13.5
+deepspeed==0.15.4
 einops==0.6.1
 einops-exts==0.0.4
 huggingface_hub
@@ -20,8 +20,9 @@ tensorboardX
 termcolor
 timm==0.9.12
 tokenizers==0.15.1
-torch>=2
+torch==2.2.0
 torchvision>=0.15
 tqdm
 transformers==4.37.2
 yacs
+datasets
